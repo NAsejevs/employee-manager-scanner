@@ -1,9 +1,15 @@
 const { NFC} = require("nfc-pcsc");
 const axios = require("axios");
 
-const serverURL = "http://localhost:8080/";
+const serverURL = "http://192.168.8.123:8080/";
 
 const nfc = new NFC();
+
+const requestConfig = {
+	headers: {
+		"Content-Type": "application/json"
+	}
+};
  
 nfc.on('reader', async reader => {
 	// Device attached
@@ -17,7 +23,7 @@ nfc.on('reader', async reader => {
 
 		axios.post(serverURL + "cardScanned").catch((e) => {
 			console.log("axios error: ", e);
-		});
+		}, requestConfig);
     });
  
     reader.on('card.off', card => {
