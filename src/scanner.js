@@ -22,7 +22,7 @@ nfc.on('reader', reader => {
 	// Device attached
 	console.log("device attached");
 		reader.on('card', card => {
-			//reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]);
+			reader.led(0b00101110, [0x00, 0x00, 0x01, 0x00]);
 
 			const uid = card.uid;
 
@@ -30,7 +30,8 @@ nfc.on('reader', reader => {
 				uid,
 			}, requestConfig).then((res) => {
 				console.log("success!: ", res.data);
-				reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]);
+				//reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]); beep
+				
 			}).catch((e) => {
 				console.log("axios error: ", e);
 			});
