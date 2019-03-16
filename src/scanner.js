@@ -11,16 +11,14 @@ const requestConfig = {
 	}
 };
  
-nfc.on('reader', async reader => {
+nfc.on('reader', reader => {
 	reader.aid = "F222222222";
 
-	try {
-		await reader.connect(CONNECT_MODE_DIRECT);
-		await reader.setBuzzerOutput(false);
-		await reader.disconnect();
-	} catch (err) {
-		console.log(err);
-	}
+	reader.connect(CONNECT_MODE_DIRECT).then(() => {
+		reader.setBuzzerOutput(false).then(() => {
+			reader.disconnect();
+		});
+	});
 
 	// Device attached
 	console.log(`${reader.reader.name}  device attached`);
@@ -34,6 +32,9 @@ nfc.on('reader', async reader => {
 		axios.post(serverURL + "cardScanned", {
 			uid,
 		}, requestConfig)
+			.then((res) => {
+				console.log("success!: ", res);
+			})
 			.catch((e) => {
 				console.log("axios error: ", e);
 			})
