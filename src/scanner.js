@@ -16,7 +16,7 @@ nfc.on('reader', reader => {
 
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(true);
-		reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]);
+		//reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]);
 	});
 
 	// Device attached
@@ -29,6 +29,7 @@ nfc.on('reader', reader => {
 				uid,
 			}, requestConfig).then((res) => {
 				console.log("success!: ", res.data);
+				reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]);
 			}).catch((e) => {
 				console.log("axios error: ", e);
 			});
