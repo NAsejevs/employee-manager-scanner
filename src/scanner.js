@@ -12,6 +12,16 @@ const requestConfig = {
 };
  
 nfc.on('reader', async reader => {
+	reader.aid = "F222222222";
+
+	try {
+		await reader.connect(CONNECT_MODE_DIRECT);
+		await reader.setBuzzerOutput(false);
+		await reader.disconnect();
+	} catch (err) {
+		console.log(err);
+	}
+
 	// Device attached
 	console.log(`${reader.reader.name}  device attached`);
  
