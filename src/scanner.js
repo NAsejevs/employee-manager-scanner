@@ -16,7 +16,7 @@ nfc.on('reader', reader => {
 
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(true);
-		//reader.led(0b01011101, [0xFF, 0x00, 0x40, 0x50, 0x04, 0x05, 0x0A, 0x02, 0x00]);
+		reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]);
 	});
 
 	// Device attached
