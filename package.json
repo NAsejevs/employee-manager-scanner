@@ -5,6 +5,6 @@
 		"nodemon": "^1.18.10"
 	},
 	"scripts": {
-		"scanner": "nodemon src/scanner.js"
+		"scanner": "git pull | nodemon src/scanner.js"
 	}
 }
