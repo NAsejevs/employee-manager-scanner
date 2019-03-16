@@ -19,13 +19,10 @@ nfc.on('reader', reader => {
 	});
 
 	// Device attached
-	console.log(`${reader.reader.name}  device attached`);
+	console.log("device attached");
  
 		reader.on('card', card => {
-			// Card has been read
-			console.log(`${reader.reader.name}  card detected`, card);
-
-			const uid = reader.card.uid;
+			const uid = card.uid;
 
 			axios.post(serverURL + "cardScanned", {
 				uid,
@@ -38,19 +35,16 @@ nfc.on('reader', reader => {
 		});
  
 		reader.on('card.off', card => {
-			// Card has been removed
-			console.log(`${reader.reader.name}  card removed`, card);
+			console.log("card removed!");
 			reader.setBuzzerOutput(false);
 		});
  
 		reader.on('error', err => {
-			// Error
-			console.log(`${reader.reader.name}  an error occurred`, err);
+			console.log("ERROR: ", err);
 		});
  
 		reader.on('end', () => {
-			// Device removed
-			console.log(`${reader.reader.name}  device removed`);
+			console.log("device removed");
 			reader.disconnect();
 		});
  
@@ -58,5 +52,5 @@ nfc.on('reader', reader => {
  
 nfc.on('error', err => {
 	// Error
-	console.log('an error occurred', err);
+	console.log("ERROR: ", err);
 });
