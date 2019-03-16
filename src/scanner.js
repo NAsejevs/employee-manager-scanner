@@ -19,7 +19,7 @@ nfc.on('reader', reader => {
 		reader.disconnect();
 	});
 
-	reader.led(0b00101110, [0x00, 0x00, 0x00, 0x00]);
+	//reader.led(0b00101110, [0x00, 0x00, 0x00, 0x00]);
 
 	// Device attached
 	console.log("device attached");
