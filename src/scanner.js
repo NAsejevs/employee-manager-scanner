@@ -40,7 +40,7 @@ nfc.on('reader', reader => {
 		reader.on('card.off', card => {
 			// Card has been removed
 			console.log(`${reader.reader.name}  card removed`, card);
-			reader.setBuzzerOutput(true);
+			reader.setBuzzerOutput(false);
 		});
  
 		reader.on('error', err => {
