@@ -15,14 +15,14 @@ nfc.on('reader', reader => {
 	reader.aid = "F222222222";
 
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
-		reader.setBuzzerOutput(true);
+		reader.setBuzzerOutput(false);
 		//reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]);
 	});
 
 	// Device attached
 	console.log("device attached");
 		reader.on('card', card => {
-			reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]);
+			//reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]);
 
 			const uid = card.uid;
 
