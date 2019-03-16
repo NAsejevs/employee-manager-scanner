@@ -1,4 +1,4 @@
-const { NFC} = require("nfc-pcsc");
+const { NFC, CONNECT_MODE_DIRECT } = require("nfc-pcsc");
 const axios = require("axios");
 
 const serverURL = "http://192.168.8.123:8080/";
