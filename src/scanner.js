@@ -60,7 +60,6 @@ nfc.on('reader', reader => {
 
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(false);
-		reader.inAutoPoll();
 		reader.disconnect();
 	});
 
