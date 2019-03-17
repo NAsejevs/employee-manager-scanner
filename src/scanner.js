@@ -57,6 +57,7 @@ const requestConfig = {
 
 nfc.on('reader', reader => {
 	reader.aid = "F222222222";
+	reader.autoProcessing = false;
 
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(false);
@@ -67,7 +68,9 @@ nfc.on('reader', reader => {
 	console.log("device attached");
 		reader.on('card', card => {
 
-			reader.led(0b01011101, [0x05, 0x05, 0x01, 0x01]);
+			reader.led(0b01011101, [0x05, 0x05, 0x01, 0x01]).catch((e) => {
+				console.log("LED ERROR: ", e);
+			});
 
 
 			const uid = card.uid;
@@ -75,7 +78,7 @@ nfc.on('reader', reader => {
 			axios.post(serverURL + "cardScanned", {
 				uid,
 			}, requestConfig).then((res) => {
-				console.log("success!: ", res.data);
+				console.log("data sent to server!");
 			}).catch((e) => {
 				console.log("axios error: ", e);
 			});
