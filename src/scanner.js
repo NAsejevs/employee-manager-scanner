@@ -13,6 +13,26 @@ const requestConfig = {
 
 // reader.led(led, blinking)
 
+	// LED
+	// 0 101 1101
+
+	// P2: LED State Control (1 byte = 8 bits)
+	// format:
+	/*
+		+-----+----------------------------------+-------------------------------------+
+		| Bit |               Item               |             Description             |
+		+-----+----------------------------------+-------------------------------------+
+		|   0 | Final Red LED State              | 1 = On; 0 = Off                     |
+		|   1 | Final Green LED State            | 1 = On; 0 = Off                     |
+		|   2 | Red LED State Mask               | 1 = Update the State; 0 = No change |
+		|   3 | Green LED State Mask             | 1 = Update the State; 0 = No change |
+		|   4 | Initial Red LED Blinking State   | 1 = On; 0 = Off                     |
+		|   5 | Initial Green LED Blinking State | 1 = On; 0 = Off                     |
+		|   6 | Red LED Blinking Mask            | 1 = Blink; 0 = Not Blink            |
+		|   7 | Green LED Blinking Mask          | 1 = Blink; 0 = Not Blink            |
+		+-----+----------------------------------+-------------------------------------+
+		*/
+
 
 	// BLINKING:
 	// [0x05, 0x05, 0x02, 0x03]
@@ -39,9 +59,9 @@ nfc.on('reader', reader => {
 		reader.on('card', card => {
 
 
-			reader.led(0b01011101, [0x01, 0x01, 0x02, 0x01]).catch((err) => {
+			reader.led(0x5d, [0x01, 0x01, 0x02, 0x01]).catch((err) => {
 				console.log("LED ERROR: ", err);
-			})
+			});
 
 
 			const uid = card.uid;
