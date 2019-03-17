@@ -10,14 +10,30 @@ const requestConfig = {
 		"Content-Type": "application/json"
 	}
 };
- 
+
+// reader.led(led, blinking)
+
+
+	// BLINKING:
+	// [0x05, 0x05, 0x02, 0x03]
+
+	// Data In: Blinking Duration Control (4 bytes)
+	// Byte 0: T1 Duration Initial Blinking State (Unit = 100 ms)
+	// Byte 1: T2 Duration Toggle Blinking State (Unit = 100 ms)
+	// Byte 2: Number of repetition
+	// Byte 3: Link to Buzzer
+	// - 00: The buzzer will not turn on
+	// - 01: The buzzer will turn on during the T1 Duration
+	// - 02: The buzzer will turn on during the T2 Duration
+	// - 03: The buzzer will turn on during the T1 and T2 Duration
+
 nfc.on('reader', reader => {
 	reader.aid = "F222222222";
 
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(false);
 		//reader.led(0b01011101, [0x00, 0x00, 0x00, 0x03]);
-		reader.led(0b01011101, [0x02, 0x01, 0x03, 0x01]).catch((err) => {
+		reader.led(0b01011101, [0x05, 0x05, 0x02, 0x03]).catch((err) => {
 			console.log("LED ERROR: ", err);
 		})
 		//reader.disconnect();
