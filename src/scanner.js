@@ -57,10 +57,10 @@ const requestConfig = {
 
 nfc.on('reader', reader => {
 	reader.aid = "F222222222";
-	reader.autoProcessing = false;
 
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(false);
+		reader.inAutoPoll();
 		reader.disconnect();
 	});
 
