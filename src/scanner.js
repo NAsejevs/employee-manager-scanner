@@ -50,7 +50,7 @@ const requestConfig = {
 	// - 00: The buzzer will not turn on
 	// - 01: The buzzer will turn on during the T1 Duration
 	// - 02: The buzzer will turn on during the T2 Duration
-	// - 03: The buzzer will turn on during the T1 and T2 Duration
+	// - 03: The buzzer will turn on during the T1 and T2 DuratioN
 
 nfc.on('reader', async reader => {
 	reader.aid = "F222222222";
