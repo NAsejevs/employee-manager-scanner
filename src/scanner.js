@@ -69,6 +69,12 @@ nfc.on('reader', reader => {
 
 	console.log("reader connected");
 
+	setTimeout(() => {
+		reader.led(0b10101110, [0x05, 0x05, 0x01, 0x00]).catch((e) => {
+			console.log("LED ERROR: ", e);
+		});
+	}, 1000);
+
 	reader.on('detection', () => {
 		console.log("detected");
 	});
@@ -91,9 +97,6 @@ nfc.on('reader', reader => {
 			uid,
 		}, requestConfig).then((res) => {
 			console.log("server responded with: ", res.data);
-			// reader.led(0b10101110, [0x05, 0x05, 0x01, 0x00]).catch((e) => {
-			// 	console.log("LED ERROR: ", e);
-			// });
 		}).catch((e) => {
 			console.log("AXIOS ERROR: ", e);
 		});
