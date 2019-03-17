@@ -68,7 +68,7 @@ nfc.on('reader', async reader => {
 		reader.on('card', async card => {
 
 			try {
-				await reader.led(0x20, [0xA, 0x05, 0x02, 0x01]);
+				await reader.led(0xA, [0x05, 0x05, 0x02, 0x01]);
 			} catch (err) {
 				console.log("LED ERROR: ", err);
 			}
