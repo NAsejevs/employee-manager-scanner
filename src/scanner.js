@@ -75,7 +75,7 @@ nfc.on('reader', reader => {
 			axios.post(serverURL + "cardScanned", {
 				uid,
 			}, requestConfig).then((res) => {
-				console.log("server responded with: ", res);
+				console.log("server responded with: ", res.data);
 				reader.led(0b10101110, [0x05, 0x05, 0x01, 0x00]).catch((e) => {
 					console.log("LED ERROR: ", e);
 				});
