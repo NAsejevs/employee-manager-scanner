@@ -60,7 +60,6 @@ nfc.on('reader', reader => {
 
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(false);
-		reader.disconnect();
 	});
 
 	console.log("reader connected");
@@ -98,6 +97,7 @@ nfc.on('reader', reader => {
  
 		reader.on('end', () => {
 			console.log("reader removed");
+			reader.disconnect();
 		});
  
 });
