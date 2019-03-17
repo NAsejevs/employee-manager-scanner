@@ -19,11 +19,11 @@ nfc.on('reader', reader => {
 		reader.disconnect();
 	});
 
+	reader.led(0b00001111, [0x00, 0x00, 0x00, 0x00]);
+
 	// Device attached
 	console.log("device attached");
 		reader.on('card', card => {
-			reader.led(0b00101110, [0x01, 0x00, 0x01, 0x01]);
-
 			const uid = card.uid;
 
 			axios.post(serverURL + "cardScanned", {
