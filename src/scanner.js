@@ -60,6 +60,11 @@ nfc.on('reader', reader => {
 
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(false);
+		reader.disconnect();
+	});
+
+	reader.connect().catch((e) => {
+		console.log("my connection error", e);
 	});
 
 	console.log("reader connected");
