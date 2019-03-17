@@ -17,8 +17,8 @@ nfc.on('reader', reader => {
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(false);
 		//reader.led(0b01011101, [0x00, 0x00, 0x00, 0x03]);
-		reader.led(0b01011101, [0x02, 0x01, 0x05, 0x01]);
-		reader.disconnect();
+		reader.led(0b01011101, [0x02, 0x01, 0x03, 0x01]);
+		//reader.disconnect();
 	});
 
 	// Device attached
@@ -46,6 +46,7 @@ nfc.on('reader', reader => {
  
 		reader.on('end', () => {
 			console.log("device removed");
+			reader.disconnect();
 		});
  
 });
