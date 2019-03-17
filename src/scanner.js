@@ -64,47 +64,37 @@ nfc.on('reader', reader => {
 		reader.disconnect();
 	});
 
-	// Device attached
-	console.log("device attached");
+	console.log("reader connected");
+
 		reader.on('card', card => {
-
-			reader.led(0b01011101, [0x05, 0x05, 0x01, 0x01]).catch((e) => {
-				console.log("LED ERROR: ", e);
-			});
-
-
 			const uid = card.uid;
 
 			axios.post(serverURL + "cardScanned", {
 				uid,
 			}, requestConfig).then((res) => {
-				console.log("data sent to server!");
+				console.log("server responded with: ", res);
+				reader.led(0b01011101, [0x05, 0x05, 0x01, 0x01]).catch((e) => {
+					console.log("LED ERROR: ", e);
+				});
 			}).catch((e) => {
-				console.log("axios error: ", e);
+				console.log("AXIOS ERROR: ", e);
 			});
 		});
  
 		reader.on('card.off', card => {
-			console.log("card removed!");
-
-			// try {
-			// 	await reader.led(0x50, [0x02, 0x01, 0x05, 0x01]);
-			// } catch (err) {
-			// 	console.log("LED ERROR: ", err);
-			// }
+			console.log("card removed");
 		});
  
 		reader.on('error', err => {
-			console.log("ERROR 1: ", err);
+			console.log("ERROR: ", err);
 		});
  
 		reader.on('end', () => {
-			console.log("device removed");
+			console.log("reader removed");
 		});
  
 });
  
 nfc.on('error', err => {
-	// Error
 	console.log("ERROR: ", err);
 });
