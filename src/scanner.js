@@ -63,9 +63,9 @@ nfc.on('reader', reader => {
 		reader.disconnect();
 	});
 
-	reader.connect().catch((e) => {
-		console.log("my connection error", e);
-	});
+	// reader.connect().catch((e) => {
+	// 	console.log("my connection error", e);
+	// });
 
 	console.log("reader connected");
 
