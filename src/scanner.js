@@ -66,6 +66,7 @@ nfc.on('reader', reader => {
 	console.log("reader connected");
 
 		reader.on('card', card => {
+			console.log("card event!");
 			reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
 				console.log("led turned red");
 			}).catch((e) => {
