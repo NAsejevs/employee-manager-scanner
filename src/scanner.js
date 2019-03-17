@@ -64,8 +64,11 @@ nfc.on('reader', async reader => {
 	console.log("device attached");
 		reader.on('card', async card => {
 
-
-			await reader.led(0x30, [0x04, 0x05, 0x02, 0x02, 0x00]);
+			try {
+				await reader.led(0x30, [0x04, 0x05, 0x02, 0x02]);
+			} catch (err) {
+				console.log("LED ERROR: ", err);
+			}
 
 
 			const uid = card.uid;
@@ -82,7 +85,11 @@ nfc.on('reader', async reader => {
 		reader.on('card.off', async card => {
 			console.log("card removed!");
 
-			await reader.led(0x30, [0x04, 0x05, 0x02, 0x02, 0x00]);
+			try {
+				await reader.led(0x30, [0x04, 0x05, 0x02, 0x02]);
+			} catch (err) {
+				console.log("LED ERROR: ", err);
+			}
 		});
  
 		reader.on('error', err => {
