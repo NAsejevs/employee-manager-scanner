@@ -81,7 +81,7 @@ nfc.on('reader', reader => {
 			});
 		});
  
-		reader.on('card.off', async card => {
+		reader.on('card.off', card => {
 			console.log("card removed!");
 
 			// try {
