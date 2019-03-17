@@ -59,7 +59,7 @@ nfc.on('reader', reader => {
 		reader.on('card', card => {
 
 
-			reader.led(0x1D, [0x01, 0x01, 0x02, 0x01]).catch((err) => {
+			reader.led(0x00, [0x01, 0x01, 0x02, 0x01]).catch((err) => {
 				console.log("LED ERROR: ", err);
 			});
 
@@ -78,7 +78,7 @@ nfc.on('reader', reader => {
 		reader.on('card.off', card => {
 			console.log("card removed!");
 
-			reader.led(0x1D, [0x01, 0x01, 0x02, 0x01]).catch((err) => {
+			reader.led(0x00, [0x01, 0x01, 0x02, 0x01]).catch((err) => {
 				console.log("LED ERROR: ", err);
 			});
 		});
