@@ -49,21 +49,18 @@ const requestConfig = {
 	// - 02: The buzzer will turn on during the T2 Duration
 	// - 03: The buzzer will turn on during the T1 and T2 Duration
 
-nfc.on('reader', reader => {
+nfc.on('reader', async reader => {
 	reader.aid = "F222222222";
 
-	reader.connect(CONNECT_MODE_DIRECT).then(() => {
-		reader.setBuzzerOutput(false);
-	});
+	await reader.connect(CONNECT_MODE_DIRECT);
+	await reader.setBuzzerOutput(false);
 
 	// Device attached
 	console.log("device attached");
 		reader.on('card', card => {
 
 
-			reader.led(0x30, [0x04, 0x05, 0x02, 0x02, 0x00]).catch((err) => {
-				console.log("LED ERROR: ", err);
-			});
+			await reader.led(0x30, [0x04, 0x05, 0x02, 0x02, 0x00]);
 
 
 			const uid = card.uid;
@@ -80,9 +77,7 @@ nfc.on('reader', reader => {
 		reader.on('card.off', card => {
 			console.log("card removed!");
 
-			reader.led(0xB3, [0x04, 0x05, 0x02, 0x02, 0x00]).catch((err) => {
-				console.log("LED ERROR: ", err);
-			});
+			await reader.led(0x30, [0x04, 0x05, 0x02, 0x02, 0x00]);
 		});
  
 		reader.on('error', err => {
