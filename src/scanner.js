@@ -67,7 +67,7 @@ nfc.on('reader', reader => {
 	console.log("device attached");
 		reader.on('card', card => {
 
-			reader.led(0b10011101, [0x05, 0x05, 0x02, 0x01]);
+			reader.led(0b01011101, [0x05, 0x05, 0x01, 0x01]);
 
 
 			const uid = card.uid;
