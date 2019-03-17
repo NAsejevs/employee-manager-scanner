@@ -22,7 +22,7 @@ const requestConfig = {
 	// format:
 	/*
 
-	0010 0000
+	1010 0111
 
 		+-----+----------------------------------+-------------------------------------+
 		| Bit |               Item               |             Description             |
@@ -68,7 +68,7 @@ nfc.on('reader', async reader => {
 		reader.on('card', async card => {
 
 			try {
-				await reader.led(0x20, [0x05, 0x05, 0x01, 0x01]);
+				await reader.led(0x20, [0xA7, 0x05, 0x01, 0x01]);
 			} catch (err) {
 				console.log("LED ERROR: ", err);
 			}
