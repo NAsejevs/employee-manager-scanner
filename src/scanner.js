@@ -61,9 +61,6 @@ nfc.on('reader', reader => {
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(false);
 		reader.disconnect();
-		reader.led(0b10101110, [0x05, 0x05, 0x01, 0x00]).catch((e) => {
-			console.log("LED ERROR: ", e);
-		});
 	});
 
 	// reader.connect().catch((e) => {
@@ -71,12 +68,6 @@ nfc.on('reader', reader => {
 	// });
 
 	console.log("reader connected");
-
-	setTimeout(() => {
-		reader.led(0b10101110, [0x05, 0x05, 0x01, 0x00]).catch((e) => {
-			console.log("LED ERROR: ", e);
-		});
-	}, 1000);
 
 	reader.on('detection', () => {
 		console.log("detected");
@@ -87,7 +78,7 @@ nfc.on('reader', reader => {
 
 
 		console.log("card event!");
-		reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
+		reader.led(0b01011001, [0x05, 0x00, 0xff, 0x00]).then(() => {
 			console.log("led turned red");
 		}).catch((e) => {
 			console.log("LED ERROR: ", e);
