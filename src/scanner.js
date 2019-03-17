@@ -3,7 +3,8 @@ const axios = require("axios");
 
 const serverURL = "http://192.168.8.123:8080/";
 
-const nfc = new NFC(console);
+//const nfc = new NFC(console); // deep debug
+const nfc = new NFC();
 
 const requestConfig = {
 	headers: {
@@ -70,7 +71,7 @@ nfc.on('reader', async reader => {
 		reader.on('card', async card => {
 
 			try {
-				await reader.led(0b01011101, [0x05, 0x05, 0x02, 0x01]);
+				await reader.led(0b10011101, [0x05, 0x05, 0x02, 0x01]);
 			} catch (err) {
 				console.log("LED ERROR: ", err);
 			}
@@ -98,7 +99,7 @@ nfc.on('reader', async reader => {
 		});
  
 		reader.on('error', err => {
-			console.log("ERROR: ", err);
+			console.log("ERROR 1: ", err);
 		});
  
 		reader.on('end', () => {
