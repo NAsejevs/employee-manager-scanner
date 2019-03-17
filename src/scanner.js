@@ -69,42 +69,48 @@ nfc.on('reader', reader => {
 
 	console.log("reader connected");
 
-		reader.on('card', card => {
-			console.log("card event!");
-			reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
-				console.log("led turned red");
-			}).catch((e) => {
-				console.log("LED ERROR: ", e);
-			});
+	reader.on('detection', () => {
+		console.log("detected");
+	});
 
-			const uid = card.uid;
-			//const uid = 0;
+	reader.on('card', card => {
+		// handle_Iso_14443_3_Tag
 
-			axios.post(serverURL + "cardScanned", {
-				uid,
-			}, requestConfig).then((res) => {
-				console.log("server responded with: ", res.data);
-				// reader.led(0b10101110, [0x05, 0x05, 0x01, 0x00]).catch((e) => {
-				// 	console.log("LED ERROR: ", e);
-				// });
-			}).catch((e) => {
-				console.log("AXIOS ERROR: ", e);
-			});
+
+		console.log("card event!");
+		reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
+			console.log("led turned red");
+		}).catch((e) => {
+			console.log("LED ERROR: ", e);
 		});
- 
-		reader.on('card.off', card => {
-			console.log("card removed");
+
+		const uid = card.uid;
+		//const uid = 0;
+
+		axios.post(serverURL + "cardScanned", {
+			uid,
+		}, requestConfig).then((res) => {
+			console.log("server responded with: ", res.data);
+			// reader.led(0b10101110, [0x05, 0x05, 0x01, 0x00]).catch((e) => {
+			// 	console.log("LED ERROR: ", e);
+			// });
+		}).catch((e) => {
+			console.log("AXIOS ERROR: ", e);
 		});
- 
-		reader.on('error', err => {
-			console.log("ERROR: ", err);
-		});
- 
-		reader.on('end', () => {
-			console.log("reader removed");
-			reader.disconnect();
-		});
- 
+	});
+
+	reader.on('card.off', card => {
+		console.log("card removed");
+	});
+
+	reader.on('error', err => {
+		console.log("ERROR: ", err);
+	});
+
+	reader.on('end', () => {
+		console.log("reader removed");
+		reader.disconnect();
+	});
 });
  
 nfc.on('error', err => {
