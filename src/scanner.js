@@ -61,6 +61,9 @@ nfc.on('reader', reader => {
 	reader.connect(CONNECT_MODE_DIRECT).then(() => {
 		reader.setBuzzerOutput(false);
 		reader.disconnect();
+		reader.led(0b10101110, [0x05, 0x05, 0x01, 0x00]).catch((e) => {
+			console.log("LED ERROR: ", e);
+		});
 	});
 
 	// reader.connect().catch((e) => {
