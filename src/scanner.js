@@ -67,13 +67,17 @@ nfc.on('reader', reader => {
 	console.log("reader connected");
 
 		reader.on('card', card => {
+			reader.led(0b01011101, [0x05, 0x05, 0x01, 0x00]).catch((e) => {
+				console.log("LED ERROR: ", e);
+			});
+
 			const uid = card.uid;
 
 			axios.post(serverURL + "cardScanned", {
 				uid,
 			}, requestConfig).then((res) => {
 				console.log("server responded with: ", res);
-				reader.led(0b01011101, [0x05, 0x05, 0x01, 0x01]).catch((e) => {
+				reader.led(0b10101110, [0x05, 0x05, 0x01, 0x00]).catch((e) => {
 					console.log("LED ERROR: ", e);
 				});
 			}).catch((e) => {
