@@ -80,11 +80,11 @@ nfc.on('reader', async reader => {
 
 	//console.log("OLD READER: ", reader);
 
-	reader.on('detection', () => {
-		console.log("detected");
-		//console.log("NEW READER: ", reader);
-		//await reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]);
-	});
+	// reader.on('detection', () => {
+	// 	console.log("detected");
+	// 	//console.log("NEW READER: ", reader);
+	// 	//await reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]);
+	// });
 
 	reader.on('card', card => {
 		//console.log("NEW READER: ", reader);
