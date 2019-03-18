@@ -77,18 +77,18 @@ nfc.on('reader', reader => {
 		// handle_Iso_14443_3_Tag
 		console.log("card event!");
 
-		reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
+		reader.led(0b01011001, [0x01, 0x00, 0x01, 0x00]).then(() => {
 			console.log("led turned red");
 		}).catch((e) => {
 			console.log("LED ERROR: ", e);
 		});
 		const redInterval = setInterval(() => {
-			reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
+			reader.led(0b01011001, [0x01, 0x00, 0x01, 0x00]).then(() => {
 				console.log("led turned red");
 			}).catch((e) => {
 				console.log("LED ERROR: ", e);
 			});
-		}, 500);
+		}, 100);
 
 		const uid = card.uid;
 		//const uid = 0;
