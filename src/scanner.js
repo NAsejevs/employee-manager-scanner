@@ -55,19 +55,27 @@ const requestConfig = {
 	// - 02: The buzzer will turn on during the T2 Duration
 	// - 03: The buzzer will turn on during the T1 and T2 DuratioN
 
-nfc.on('reader', reader => {
+nfc.on('reader', async reader => {
 	reader.aid = "F222222222";
 
-	reader.connect(CONNECT_MODE_DIRECT).then(() => {
-		reader.setBuzzerOutput(false);
-		reader.disconnect();
-	});
+	// reader.connect(CONNECT_MODE_DIRECT).then(() => {
+	// 	reader.setBuzzerOutput(false);
+	// 	reader.disconnect();
+	// });
+
+	try {
+		await reader.connect(CONNECT_MODE_DIRECT);
+		await reader.setBuzzerOutput(false);
+		//await reader.disconnect();
+	} catch(e) {
+
+	}
 
 	// reader.connect().catch((e) => {
 	// 	console.log("my connection error", e);
 	// });
 
-	console.log("reader connected");
+	//console.log("reader connected");
 
 	console.log("OLD READER: ", reader);
 
