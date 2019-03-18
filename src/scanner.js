@@ -80,12 +80,12 @@ nfc.on('reader', async reader => {
 
 	console.log("OLD READER: ", reader);
 
-	reader.on('detection', () => {
+	reader.on('detection', async () => {
 		console.log("detected");
 		await reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]);
 	});
 
-	reader.on('card', card => {
+	reader.on('card', async card => {
 		console.log("NEW READER: ", reader);
 		// handle_Iso_14443_3_Tag
 		// console.log("card event!");
