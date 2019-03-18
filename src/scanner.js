@@ -67,7 +67,7 @@ nfc.on('reader', async reader => {
 		await reader.connect(CONNECT_MODE_DIRECT);
 		await reader.setBuzzerOutput(false);
 		//await reader.disconnect();
-		await reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]);
+		//await reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]);
 	} catch(e) {
 
 	}
@@ -82,6 +82,7 @@ nfc.on('reader', async reader => {
 
 	reader.on('detection', () => {
 		console.log("detected");
+		await reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]);
 	});
 
 	reader.on('card', card => {
