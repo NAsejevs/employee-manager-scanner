@@ -69,38 +69,41 @@ nfc.on('reader', reader => {
 
 	console.log("reader connected");
 
+	console.log("OLD READER: ", reader);
+
 	reader.on('detection', () => {
 		console.log("detected");
 	});
 
 	reader.on('card', card => {
+		console.log("NEW READER: ", reader);
 		// handle_Iso_14443_3_Tag
-		console.log("card event!");
+		// console.log("card event!");
 
-		reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
-			console.log("led turned red");
-		}).catch((e) => {
-			console.log("LED ERROR: ", e);
-		});
-		const redInterval = setInterval(() => {
-			reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
-				console.log("led turned red");
-			}).catch((e) => {
-				console.log("LED ERROR: ", e);
-			});
-		}, 500);
+		// reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
+		// 	console.log("led turned red");
+		// }).catch((e) => {
+		// 	console.log("LED ERROR: ", e);
+		// });
+		// const redInterval = setInterval(() => {
+		// 	reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
+		// 		console.log("led turned red");
+		// 	}).catch((e) => {
+		// 		console.log("LED ERROR: ", e);
+		// 	});
+		// }, 500);
 
-		const uid = card.uid;
-		//const uid = 0;
+		// const uid = card.uid;
+		// //const uid = 0;
 
-		axios.post(serverURL + "cardScanned", {
-			uid,
-		}, requestConfig).then((res) => {
-			console.log("server responded with: ", res.data);
-			clearInterval(redInterval);
-		}).catch((e) => {
-			console.log("AXIOS ERROR: ", e);
-		});
+		// axios.post(serverURL + "cardScanned", {
+		// 	uid,
+		// }, requestConfig).then((res) => {
+		// 	console.log("server responded with: ", res.data);
+		// 	clearInterval(redInterval);
+		// }).catch((e) => {
+		// 	console.log("AXIOS ERROR: ", e);
+		// });
 	});
 
 	reader.on('card.off', card => {
