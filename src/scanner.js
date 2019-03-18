@@ -77,14 +77,18 @@ nfc.on('reader', reader => {
 		// handle_Iso_14443_3_Tag
 		console.log("card event!");
 
-		const responseReceived = false;
-		while(responseReceived === false) {
+		reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
+			console.log("led turned red");
+		}).catch((e) => {
+			console.log("LED ERROR: ", e);
+		});
+		const redInterval = setInterval(() => {
 			reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
 				console.log("led turned red");
 			}).catch((e) => {
 				console.log("LED ERROR: ", e);
 			});
-		}
+		}, 500);
 
 		const uid = card.uid;
 		//const uid = 0;
@@ -93,7 +97,7 @@ nfc.on('reader', reader => {
 			uid,
 		}, requestConfig).then((res) => {
 			console.log("server responded with: ", res.data);
-			responseReceived = true;
+			clearInterval(redInterval);
 		}).catch((e) => {
 			console.log("AXIOS ERROR: ", e);
 		});
