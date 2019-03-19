@@ -55,15 +55,6 @@ const requestConfig = {
 	// - 02: The buzzer will turn on during the T2 Duration
 	// - 03: The buzzer will turn on during the T1 and T2 DuratioN
 
-	function clone(obj) {
-		if (null == obj || "object" != typeof obj) return obj;
-		var copy = obj.constructor();
-		for (var attr in obj) {
-			if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
-		}
-		return copy;
-	}
-
 nfc.on('reader', async reader => {
 	reader.aid = "F222222222";
 
@@ -72,14 +63,11 @@ nfc.on('reader', async reader => {
 	// 	reader.disconnect();
 	// });
 
-	const connection = {};
-
 	try {
 		await reader.connect(CONNECT_MODE_DIRECT);
 		await reader.setBuzzerOutput(false);
 		//await reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]);
 		await reader.led(0b01011101, [0x02, 0x01, 0x05, 0x01]);
-		connection = clone(reader);
 		await reader.disconnect();
 	} catch(e) {
 
@@ -104,11 +92,7 @@ nfc.on('reader', async reader => {
 		// handle_Iso_14443_3_Tag
 		console.log("card event!");
 		//connection.led(0b01011101, [0x02, 0x01, 0x05, 0x01]);
-		try {
-			await connection.led(0b01011101, [0x02, 0x01, 0x05, 0x01]);
-		} catch(e) {
-			console.log("LED ERROR: ", e);
-		}
+		await reader.led(0b01011101, [0x02, 0x01, 0x05, 0x01]);
 
 		// reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
 		// 	console.log("led turned red");
