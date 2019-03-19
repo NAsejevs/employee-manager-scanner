@@ -63,10 +63,13 @@ nfc.on('reader', async reader => {
 	// 	reader.disconnect();
 	// });
 
+	const connection = {};
+
 	try {
 		await reader.connect(CONNECT_MODE_DIRECT);
 		await reader.setBuzzerOutput(false);
 		//await reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]);
+		connection = {...reader};
 		await reader.led(0b01011101, [0x02, 0x01, 0x05, 0x01]);
 		await reader.disconnect();
 	} catch(e) {
@@ -90,7 +93,8 @@ nfc.on('reader', async reader => {
 	reader.on('card', card => {
 		//console.log("NEW READER: ", reader);
 		// handle_Iso_14443_3_Tag
-		 console.log("card event!");
+		console.log("card event!");
+		connection.led(0b01011101, [0x02, 0x01, 0x05, 0x01]);
 
 		// reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
 		// 	console.log("led turned red");
