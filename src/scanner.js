@@ -45,6 +45,8 @@ const errorLEDBits = 0b10111010;
 nfc.on("reader", async reader => {
 	reader.aid = "F222222222";
 
+	console.log("reader connected!");
+
 	try {
 		await reader.connect(CONNECT_MODE_DIRECT);
 		//await reader.setPICC(0b11111110);
