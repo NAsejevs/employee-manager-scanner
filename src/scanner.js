@@ -40,7 +40,7 @@ const requestConfig = {
 // - 02: The buzzer will turn on during the T2 Duration
 // - 03: The buzzer will turn on during the T1 and T2 DuratioN
 
-const successLEDBits = 0b00110111;
+const successLEDBits = 0b00110011;
 const errorLEDBits = 0b01000000;
 
 nfc.on("reader", async reader => {
