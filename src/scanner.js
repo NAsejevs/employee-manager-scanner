@@ -3,8 +3,8 @@ const axios = require("axios");
 
 const serverURL = "http://192.168.8.123:8080/";
 
-const nfc = new NFC(console); // deep debug
-//const nfc = new NFC();
+//const nfc = new NFC(console); // deep debug
+const nfc = new NFC();
 
 const requestConfig = {
 	headers: {
@@ -66,7 +66,6 @@ nfc.on("reader", async reader => {
 				uid,
 			}, requestConfig).then((res) => {
 				console.log("success!");
-				clearInterval(waitingInterval);
 			}).catch((e) => {
 				console.log("axios error: ", e);
 			});
