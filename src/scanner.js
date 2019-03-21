@@ -40,7 +40,7 @@ const requestConfig = {
 // - 02: The buzzer will turn on during the T2 Duration
 // - 03: The buzzer will turn on during the T1 and T2 DuratioN
 
-const successLEDBits = 0b00010100;
+const successLEDBits = 0b10000000;
 const errorLEDBits = 0b01000000;
 
 nfc.on("reader", async reader => {
@@ -69,6 +69,9 @@ nfc.on("reader", async reader => {
 				uid,
 			}, requestConfig).then((res) => {
 				console.log("success!");
+				reader.led(successLEDBits, [0x00, 0x05, 0x01, 0x02]).catch((e) => {
+					console.log("led error: ", e);
+				});
 			}).catch((e) => {
 				console.log("axios error: ", e);
 				reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
@@ -76,10 +79,6 @@ nfc.on("reader", async reader => {
 				});
 			});
 		}
-
-		reader.led(successLEDBits, [0x05, 0x05, 0x02, 0x01]).catch((e) => {
-			console.log("led error: ", e);
-		});
 	});
 
 	reader.on("card.off", card => {
