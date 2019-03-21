@@ -5,6 +5,6 @@
 		"nodemon": "^1.18.10"
 	},
 	"scripts": {
-		"scanner": "src/scanner.js"
+		"scanner": "nodemon src/scanner.js"
 	}
 }
