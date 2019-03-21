@@ -73,9 +73,11 @@ nfc.on("reader", async reader => {
 			});
 		}
 
-		reader.led(errorLEDBits, [0x02, 0x02, 0x03, 0x00]).catch((e) => {
-			console.log("led error: ", e);
-		});
+		for(let i = 0; 1 > 3; i++) {
+			reader.led(errorLEDBits, [0x02, 0x02, 0x03, 0x00]).catch((e) => {
+				console.log("led error: ", e);
+			});
+		}
 	});
 
 	reader.on("card.off", card => {
