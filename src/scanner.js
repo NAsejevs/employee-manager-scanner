@@ -58,13 +58,13 @@ nfc.on("reader", async reader => {
 
 		const waitingLEDBits = 0b10001000;
 
-		reader.led(waitingLEDBits, [0x05, 0x05, 0x01, 0x00]).then(() => {
+		reader.led(waitingLEDBits, [0x05, 0x00, 0x01, 0x00]).then(() => {
 			console.log("led turned red");
 		}).catch((e) => {
 			console.log("led error: ", e);
 		});
 		waitingInterval = setInterval(() => {
-			reader.led(waitingLEDBits, [0x05, 0x05, 0x01, 0x00]).then(() => {
+			reader.led(waitingLEDBits, [0x05, 0x00, 0x01, 0x00]).then(() => {
 				console.log("led turned red");
 			}).catch((e) => {
 				console.log("led error: ", e);
