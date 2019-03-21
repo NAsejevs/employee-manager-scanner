@@ -26,6 +26,7 @@ const requestConfig = {
 |   6 | Red LED Blinking Mask            | 1 = Blink; 0 = Not Blink            |
 |   7 | Green LED Blinking Mask          | 1 = Blink; 0 = Not Blink            |
 +-----+----------------------------------+-------------------------------------+
+10001000
 */
 
 // BLINKING
@@ -53,7 +54,7 @@ nfc.on("reader", async reader => {
 	reader.on("card", card => {
 		console.log("card read");
 
-		const waitingLEDBits = 0b10011001;
+		const waitingLEDBits = 0b10001000;
 
 		reader.led(waitingLEDBits, [0x05, 0x00, 0x01, 0x00]).then(() => {
 			console.log("led turned red");
