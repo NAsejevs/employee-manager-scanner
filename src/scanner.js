@@ -45,7 +45,7 @@ nfc.on("reader", async reader => {
 
 	try {
 		await reader.connect(CONNECT_MODE_DIRECT);
-		await reader.setPICC(0b00000000);
+		await reader.setPICC(0b11111110);
 		await reader.inAutoPoll();
 		await reader.setBuzzerOutput(false);
 		await reader.disconnect();
