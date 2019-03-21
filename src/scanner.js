@@ -50,9 +50,6 @@ nfc.on("reader", async reader => {
 
 	try {
 		await reader.connect(CONNECT_MODE_DIRECT);
-		//await reader.setPICC(0b11111110);
-		//await reader.setPICC(0b11111111);
-		//await reader.inAutoPoll();
 		await reader.setBuzzerOutput(false);
 		await reader.disconnect();
 	} catch(e) {
@@ -65,7 +62,7 @@ nfc.on("reader", async reader => {
 		const uid = card.uid;
 
 		if(uid) {
-			axios.post(serverURL + "cardScanned", {
+			axios.post(serverURL + "cardScanneddwewef", {
 				uid,
 			}, requestConfig).then((res) => {
 				console.log("success!");
