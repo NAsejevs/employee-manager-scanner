@@ -40,29 +40,37 @@ const requestConfig = {
 // - 02: The buzzer will turn on during the T2 Duration
 // - 03: The buzzer will turn on during the T1 and T2 DuratioN
 
+const errorLEDBits = 0b10111010;
+
 nfc.on("reader", async reader => {
 	reader.aid = "F222222222";
 
 	try {
 		await reader.connect(CONNECT_MODE_DIRECT);
+		//await reader.setPICC(0b11111110);
+		//await reader.setPICC(0b11111111);
+		//await reader.inAutoPoll();
 		//await reader.setBuzzerOutput(false);
 		await reader.disconnect();
 	} catch(e) {
 		console.log("reader connection error: ", e);
 	}
 
-	reader.on("card", card => {
+	reader.on("card", async card => {
 		console.log("card read");
 
 		const uid = card.uid;
 
-		axios.post(serverURL + "cardScanned", {
-			uid,
-		}, requestConfig).then((res) => {
-			console.log("success!");
-		}).catch((e) => {
-			console.log("axios error: ", e);
-		});
+		if(uid) {
+			axios.post(serverURL + "cardScanned", {
+				uid,
+			}, requestConfig).then((res) => {
+				console.log("success!");
+				clearInterval(waitingInterval);
+			}).catch((e) => {
+				console.log("axios error: ", e);
+			});
+		}
 	});
 
 	reader.on("card.off", card => {
@@ -71,11 +79,14 @@ nfc.on("reader", async reader => {
 
 	reader.on("error", err => {
 		console.log("error: ", err);
+
+		reader.led(errorLEDBits, [0x05, 0x05, 0x03, 0x01]).catch((e) => {
+			console.log("led error: ", e);
+		});
 	});
 
 	reader.on("end", () => {
 		console.log("reader removed");
-		reader.disconnect();
 	});
 });
  
