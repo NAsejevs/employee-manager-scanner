@@ -51,6 +51,8 @@ nfc.on("reader", async reader => {
 		console.log("reader connection error: ", e);
 	}
 
+	let waitingInterval = null;
+
 	reader.on("card", card => {
 		console.log("card read");
 
@@ -61,7 +63,7 @@ nfc.on("reader", async reader => {
 		}).catch((e) => {
 			console.log("led error: ", e);
 		});
-		const waitingInterval = setInterval(() => {
+		waitingInterval = setInterval(() => {
 			reader.led(waitingLEDBits, [0x05, 0x00, 0x01, 0x00]).then(() => {
 				console.log("led turned red");
 			}).catch((e) => {
@@ -83,6 +85,7 @@ nfc.on("reader", async reader => {
 
 	reader.on("card.off", card => {
 		console.log("card removed");
+		clearInterval(waitingInterval);
 	});
 
 	reader.on("error", err => {
