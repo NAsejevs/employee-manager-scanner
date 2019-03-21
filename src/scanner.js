@@ -48,7 +48,7 @@ nfc.on("reader", async reader => {
 		//await reader.setPICC(0b11111110);
 		//await reader.setPICC(0b11111111);
 		//await reader.inAutoPoll();
-		await reader.setBuzzerOutput(false);
+		//await reader.setBuzzerOutput(false);
 		await reader.disconnect();
 	} catch(e) {
 		console.log("reader connection error: ", e);
