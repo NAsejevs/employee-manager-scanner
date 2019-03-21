@@ -65,7 +65,7 @@ nfc.on("reader", async reader => {
 		const uid = card.uid;
 
 		if(uid) {
-			axios.post(serverURL + "cardScanned", {
+			axios.post(serverURL + "cardScannedd", {
 				uid,
 			}, requestConfig).then((res) => {
 				console.log("success!");
