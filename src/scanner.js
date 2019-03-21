@@ -45,34 +45,14 @@ nfc.on("reader", async reader => {
 
 	try {
 		await reader.connect(CONNECT_MODE_DIRECT);
-		//await reader.setPICC(0b11111110);
-		//await reader.setPICC(0b11111111);
-		//await reader.inAutoPoll();
 		//await reader.setBuzzerOutput(false);
 		await reader.disconnect();
 	} catch(e) {
 		console.log("reader connection error: ", e);
 	}
 
-	let waitingInterval = null;
-
 	reader.on("card", card => {
 		console.log("card read");
-
-		const waitingLEDBits = 0b10001000;
-
-		reader.led(waitingLEDBits, [0x05, 0x00, 0x01, 0x00]).then(() => {
-			console.log("led turned red");
-		}).catch((e) => {
-			console.log("led error: ", e);
-		});
-		waitingInterval = setInterval(() => {
-			reader.led(waitingLEDBits, [0x05, 0x00, 0x01, 0x00]).then(() => {
-				console.log("led turned red");
-			}).catch((e) => {
-				console.log("led error: ", e);
-			});
-		}, 500);
 
 		const uid = card.uid;
 
@@ -80,7 +60,6 @@ nfc.on("reader", async reader => {
 			uid,
 		}, requestConfig).then((res) => {
 			console.log("success!");
-			clearInterval(waitingInterval);
 		}).catch((e) => {
 			console.log("axios error: ", e);
 		});
@@ -88,7 +67,6 @@ nfc.on("reader", async reader => {
 
 	reader.on("card.off", card => {
 		console.log("card removed");
-		clearInterval(waitingInterval);
 	});
 
 	reader.on("error", err => {
