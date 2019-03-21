@@ -39,7 +39,7 @@ const requestConfig = {
 // - 02: The buzzer will turn on during the T2 Duration
 // - 03: The buzzer will turn on during the T1 and T2 DuratioN
 
-nfc.on('reader', async reader => {
+nfc.on("reader", async reader => {
 	reader.aid = "F222222222";
 
 	try {
@@ -50,50 +50,50 @@ nfc.on('reader', async reader => {
 		console.log("reader connection error: ", e);
 	}
 
-	reader.on('card', card => {
+	reader.on("card", card => {
 		console.log("card read");
-		//reader.led(0b01011101, [0x02, 0x01, 0x05, 0x00]);
 
-		reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
+		const waitingLEDBits = 0b10011001;
+
+		reader.led(waitingLEDBits, [0x05, 0x00, 0x01, 0x00]).then(() => {
 			console.log("led turned red");
 		}).catch((e) => {
-			console.log("LED ERROR: ", e);
+			console.log("led error: ", e);
 		});
-		const redInterval = setInterval(() => {
-			reader.led(0b01011001, [0x05, 0x00, 0x01, 0x00]).then(() => {
+		const waitingInterval = setInterval(() => {
+			reader.led(waitingLEDBits, [0x05, 0x00, 0x01, 0x00]).then(() => {
 				console.log("led turned red");
 			}).catch((e) => {
-				console.log("LED ERROR: ", e);
+				console.log("led error: ", e);
 			});
 		}, 500);
 
 		const uid = card.uid;
-		//const uid = 0;
 
 		axios.post(serverURL + "cardScanned", {
 			uid,
 		}, requestConfig).then((res) => {
-			console.log("server responded with: ", res.data);
-			clearInterval(redInterval);
+			console.log("success!");
+			clearInterval(waitingInterval);
 		}).catch((e) => {
-			console.log("AXIOS ERROR: ", e);
+			console.log("axios error: ", e);
 		});
 	});
 
-	reader.on('card.off', card => {
+	reader.on("card.off", card => {
 		console.log("card removed");
 	});
 
-	reader.on('error', err => {
-		console.log("ERROR: ", err);
+	reader.on("error", err => {
+		console.log("error: ", err);
 	});
 
-	reader.on('end', () => {
+	reader.on("end", () => {
 		console.log("reader removed");
 		reader.disconnect();
 	});
 });
  
-nfc.on('error', err => {
-	console.log("ERROR: ", err);
+nfc.on("error", err => {
+	console.log("error: ", err);
 });
