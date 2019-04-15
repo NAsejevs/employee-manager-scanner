@@ -1,10 +1,36 @@
 const { NFC, CONNECT_MODE_DIRECT } = require("nfc-pcsc");
+const express = require("express");
+const compression = require("compression");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 const axios = require("axios");
 
 const serverURL = "http://localhost:8080/";
 
 //const nfc = new NFC(console); // deep debug
 const nfc = new NFC();
+const app = express();
+
+var whitelist = [
+	"http://localhost",
+	"http://192.168.1.150",
+];
+
+const corsOptions = {
+	credentials: true,
+	origin: function(origin, callback){
+        var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+        callback(null, originIsWhitelisted);
+    },
+	optionsSuccessStatus: 200
+};
+
+// Middleware
+app.use(
+	cors(corsOptions), // User CORS to restric connections from anywhere other than localhost
+	compression(),
+	bodyParser.json() // Parse JSON requests
+);
 
 const requestConfig = {
 	headers: {
@@ -47,6 +73,8 @@ nfc.on("reader", async reader => {
 	reader.aid = "F222222222";
 
 	console.log("reader connected!");
+
+	axios.post(serverURL + "scannerPing");
 
 	try {
 		await reader.connect(CONNECT_MODE_DIRECT);
