@@ -5,15 +5,11 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const axios = require("axios");
 
-const serverURL = "http://localhost:8080/";
-
-//const nfc = new NFC(console); // deep debug
-const nfc = new NFC();
 const app = express();
 
 var whitelist = [
-	"http://localhost",
-	"http://192.168.1.150",
+	"http://localhost:8080",
+	"http://192.168.1.150:8080",
 ];
 
 const corsOptions = {
@@ -32,11 +28,20 @@ app.use(
 	bodyParser.json() // Parse JSON requests
 );
 
-const requestConfig = {
-	headers: {
-		"Content-Type": "application/json"
-	}
-};
+// Start the server!
+const server = app.listen(8081, () => {
+	console.log("Server started...\nPORT: 8081");
+});
+
+// Server is on and is ready to listen and respond!
+server.on("listening", () => {
+	console.log("Scanner listening for ping...");
+});
+
+app.post("/ping", (req, res) => {
+	res.send(true);
+	res.end();
+});
 
 // LED
 /*
@@ -66,6 +71,11 @@ const requestConfig = {
 // - 02: The buzzer will turn on during the T2 Duration
 // - 03: The buzzer will turn on during the T1 and T2 DuratioN
 
+const serverURL = "http://localhost:8080/";
+
+//const nfc = new NFC(console); // deep debug
+const nfc = new NFC();
+
 const successLEDBits = 0b10000000;
 const errorLEDBits = 0b01000000;
 
@@ -73,8 +83,6 @@ nfc.on("reader", async reader => {
 	reader.aid = "F222222222";
 
 	console.log("reader connected!");
-
-	axios.post(serverURL + "scannerPing");
 
 	try {
 		await reader.connect(CONNECT_MODE_DIRECT);
@@ -92,7 +100,7 @@ nfc.on("reader", async reader => {
 		if(uid) {
 			axios.post(serverURL + "cardScanned", {
 				uid,
-			}, requestConfig).then((res) => {
+			}).then((res) => {
 				console.log("success!");
 				reader.led(successLEDBits, [0x00, 0x02, 0x01, 0x02]).catch((e) => {
 					console.log("led error: ", e);
