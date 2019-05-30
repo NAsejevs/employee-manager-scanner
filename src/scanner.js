@@ -89,7 +89,7 @@ nfc.on("reader", async reader => {
 		await reader.setBuzzerOutput(false);
 		await reader.disconnect();
 	} catch(e) {
-		console.log("reader connection error: ", e);
+		//console.log("reader connection error: ", e);
 	}
 
 	reader.on("card", async card => {
@@ -103,12 +103,12 @@ nfc.on("reader", async reader => {
 			}).then((res) => {
 				console.log("success!");
 				reader.led(successLEDBits, [0x00, 0x02, 0x01, 0x02]).catch((e) => {
-					console.log("led error: ", e);
+					//console.log("led error: ", e);
 				});
 			}).catch((e) => {
 				console.log("axios error: ", e);
 				reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
-					console.log("led error: ", e);
+					//console.log("led error: ", e);
 				});
 			});
 		}
@@ -122,7 +122,7 @@ nfc.on("reader", async reader => {
 		console.log("error: ", err);
 
 		reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
-			console.log("led error: ", e);
+			//console.log("led error: ", e);
 		});
 	});
 
