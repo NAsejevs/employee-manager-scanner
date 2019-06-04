@@ -6,6 +6,9 @@ const bodyParser = require("body-parser");
 const axios = require("axios");
 
 const app = express();
+const admin = process.env.admin;
+
+console.log(admin);
 
 var whitelist = [
 	"http://localhost:8080",
@@ -43,7 +46,7 @@ app.post("/ping", (req, res) => {
 	res.end();
 });
 
-// LED
+// LEDs
 /*
 +-----+----------------------------------+-------------------------------------+
 | Bit |               Item               |             Description             |
@@ -57,7 +60,6 @@ app.post("/ping", (req, res) => {
 |   6 | Red LED Blinking Mask            | 1 = Blink; 0 = Not Blink            |
 |   7 | Green LED Blinking Mask          | 1 = Blink; 0 = Not Blink            |
 +-----+----------------------------------+-------------------------------------+
-10001000
 */
 
 // BLINKING
@@ -73,7 +75,6 @@ app.post("/ping", (req, res) => {
 
 const serverURL = "http://localhost:8080/";
 
-//const nfc = new NFC(console); // deep debug
 const nfc = new NFC();
 
 const successLEDBits = 0b10000000;
@@ -100,6 +101,7 @@ nfc.on("reader", async reader => {
 		if(uid) {
 			axios.post(serverURL + "cardScanned", {
 				uid,
+				admin
 			}).then((res) => {
 				console.log("success!");
 				reader.led(successLEDBits, [0x00, 0x02, 0x01, 0x02]).catch((e) => {
