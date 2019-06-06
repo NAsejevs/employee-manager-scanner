@@ -103,10 +103,20 @@ nfc.on("reader", async reader => {
 				uid,
 				admin
 			}).then((res) => {
-				console.log("success!");
-				reader.led(successLEDBits, [0x00, 0x02, 0x01, 0x02]).catch((e) => {
-					//console.log("led error: ", e);
-				});
+				switch(res.data.status) {
+					case 0: {
+						reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
+							//console.log("led error: ", e);
+						});
+						break;
+					}
+					default: {
+						reader.led(successLEDBits, [0x00, 0x02, 0x01, 0x02]).catch((e) => {
+							//console.log("led error: ", e);
+						});
+						break;
+					}
+				}
 			}).catch((e) => {
 				console.log("axios error: ", e);
 				reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
