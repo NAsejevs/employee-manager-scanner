@@ -8,6 +8,8 @@ const axios = require("axios");
 const app = express();
 const admin = process.env.admin;
 
+console.log("Running as admin: ", admin);
+
 const { serverURL } = require("./config");
 
 var whitelist = [
