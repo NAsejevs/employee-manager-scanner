@@ -8,8 +8,6 @@ const axios = require("axios");
 const app = express();
 const admin = process.env.admin;
 
-console.log(admin);
-
 var whitelist = [
 	"http://localhost:8080",
 	"http://192.168.1.150:8080",
