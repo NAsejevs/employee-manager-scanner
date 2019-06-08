@@ -1,5 +1,5 @@
-const { NFC, CONNECT_MODE_DIRECT } = require("nfc-pcsc");
 const express = require("express");
+const { NFC, CONNECT_MODE_DIRECT } = require("nfc-pcsc");
 const compression = require("compression");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -31,6 +31,11 @@ app.use(
 	bodyParser.json() // Parse JSON requests
 );
 
+app.post("/ping", (req, res) => {
+	res.send(true);
+	res.end();
+});
+
 // Start the server!
 const server = app.listen(8081, () => {
 	console.log("Server started...\nPORT: 8081");
@@ -39,11 +44,6 @@ const server = app.listen(8081, () => {
 // Server is on and is ready to listen and respond!
 server.on("listening", () => {
 	console.log("Scanner listening for ping...");
-});
-
-app.post("/ping", (req, res) => {
-	res.send(true);
-	res.end();
 });
 
 // LEDs
