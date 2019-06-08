@@ -8,6 +8,8 @@ const axios = require("axios");
 const app = express();
 const admin = process.env.admin;
 
+const { serverURL } = require("./config");
+
 var whitelist = [
 	"http://localhost:8080",
 	"http://192.168.1.150:8080",
@@ -70,8 +72,6 @@ server.on("listening", () => {
 // - 01: The buzzer will turn on during the T1 Duration
 // - 02: The buzzer will turn on during the T2 Duration
 // - 03: The buzzer will turn on during the T1 and T2 DuratioN
-
-const serverURL = "http://localhost:8080/";
 
 const nfc = new NFC();
 
