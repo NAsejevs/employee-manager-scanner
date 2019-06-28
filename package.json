@@ -12,6 +12,6 @@
 	},
 	"scripts": {
 		"scanner": "cross-env ADMIN=0 nodemon src/scanner.js",
-		"scanner_admin": "cross-env ADMIN=0 nodemon src/scanner.js"
+		"scanner_admin": "cross-env ADMIN=1 nodemon src/scanner.js"
 	}
 }
