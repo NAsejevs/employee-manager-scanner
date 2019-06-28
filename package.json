@@ -4,13 +4,14 @@
 		"body-parser": "^1.18.3",
 		"compression": "^1.7.4",
 		"cors": "^2.8.5",
+		"cross-env": "^5.2.0",
 		"dotenv": "^8.0.0",
 		"express": "^4.16.4",
 		"nfc-pcsc": "^0.7.1",
 		"nodemon": "^1.18.10"
 	},
 	"scripts": {
-		"scanner": "nodemon src/scanner.js",
-		"scanner_admin": "nodemon src/scanner.js"
+		"scanner": "cross-env ADMIN=0 nodemon src/scanner.js",
+		"scanner_admin": "cross-env ADMIN=0 nodemon src/scanner.js"
 	}
 }
