@@ -10,7 +10,7 @@
 		"nodemon": "^1.18.10"
 	},
 	"scripts": {
-		"scanner": "ADMIN=0 nodemon src/scanner.js",
-		"scanner_admin": "ADMIN=1 nodemon src/scanner.js"
+		"scanner": "nodemon src/scanner.js",
+		"scanner_admin": "nodemon src/scanner.js"
 	}
 }
