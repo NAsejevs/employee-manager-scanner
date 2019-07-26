@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"acr1222l": "^0.4.0",
 		"axios": "^0.18.0",
 		"body-parser": "^1.18.3",
 		"compression": "^1.7.4",
@@ -12,6 +13,7 @@
 	},
 	"scripts": {
 		"scanner": "cross-env ADMIN=0 nodemon src/scanner.js",
-		"scanner_admin": "cross-env ADMIN=1 nodemon src/scanner.js"
+		"scanner_admin": "cross-env ADMIN=1 nodemon src/scanner.js",
+		"scanner_lcd": "cross-env LCD=1 nodemon src/scanner.js"
 	}
 }

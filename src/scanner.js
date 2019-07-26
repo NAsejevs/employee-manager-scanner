@@ -7,6 +7,7 @@ const axios = require("axios");
 
 const app = express();
 const admin = process.env.admin;
+const lcd = process.env.lcd;
 
 console.log("Running as admin: ", admin);
 
@@ -75,74 +76,130 @@ server.on("listening", () => {
 // - 02: The buzzer will turn on during the T2 Duration
 // - 03: The buzzer will turn on during the T1 and T2 DuratioN
 
-const nfc = new NFC();
+const onCardRead = (uid) => {
+	if(uid) {
+		return axios.post(serverURL + "cardScanned", {
+			uid,
+			admin
+		});
+	}
+}
 
-const successLEDBits = 0b10000000;
-const errorLEDBits = 0b01000000;
+const lcd_reader = require('acr1222l');
 
-nfc.on("reader", async reader => {
-	reader.aid = "F222222222";
+if(lcd) {
 
-	console.log("reader connected!");
-
-	try {
-		await reader.connect(CONNECT_MODE_DIRECT);
-		await reader.setBuzzerOutput(false);
-		await reader.disconnect();
-	} catch(e) {
-		//console.log("reader connection error: ", e);
+	const lcd_reader_error = (err) => {
+		console.log('NFC ERROR CODE:', err.error_code);
+		console.log('NFC ERROR MESSAGE:', err.error);
 	}
 
-	reader.on("card", async card => {
-		console.log("card read");
+	async function main() {
+		await lcd_reader.initialize(lcd_reader_error, debug=true);
+		await lcd_reader.writeToLCD('LABDIEN!', '');
 
-		const uid = card.uid;
+		let uuid = null;
+		async function waitForCard() {
+			try { 
+				uuid = await lcd_reader.readUUID();
+				await onCardRead(uuid).then((data) => {
+					lcd_reader.writeToLCD('Card UUID:', uuid.toString('hex'));
+					// if(data.data.status === 0) {
+					// 	throw new Error();
+					// }
+					console.log("DATA: ", data.data);
 
-		if(uid) {
-			axios.post(serverURL + "cardScanned", {
-				uid,
-				admin
-			}).then((res) => {
-				switch(res.data.status) {
-					case 0: {
-						reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
-							//console.log("led error: ", e);
-						});
-						break;
-					}
-					default: {
-						reader.led(successLEDBits, [0x00, 0x02, 0x01, 0x02]).catch((e) => {
-							//console.log("led error: ", e);
-						});
-						break;
-					}
-				}
-			}).catch((e) => {
-				console.log("axios error: ", e);
-				reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
-					//console.log("led error: ", e);
+					setTimeout(async () => {
+						await lcd_reader.clearLCD();
+						await lcd_reader.writeToLCD('LABDIEN!', '');
+						await lcd_reader.stopReadUUID();
+						await waitForCard();
+					}, 2000);
 				});
-			});
+			} catch {
+				await lcd_reader.writeToLCD('ERROR!', '');
+				setTimeout(async () => {
+					await waitForCard();
+				}, 1000);
+			}
 		}
-	});
 
-	reader.on("card.off", card => {
-		console.log("card removed");
-	});
+		await waitForCard();
+	}
 
-	reader.on("error", err => {
-		console.log("error: ", err);
+	main();
+} else {
+	const nfc = new NFC();
 
-		reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
-			//console.log("led error: ", e);
+	const successLEDBits = 0b10000000;
+	const errorLEDBits = 0b01000000;
+
+	nfc.on("reader", async reader => {
+		reader.aid = "F222222222";
+
+		console.log("reader connected!");
+
+		try {
+			await reader.connect(CONNECT_MODE_DIRECT);
+			await reader.setBuzzerOutput(false);
+			await reader.disconnect();
+		} catch(e) {
+			console.log("reader connection error: ", e);
+		}
+
+		reader.on("card", card => {
+
+			console.log("card read");
+
+			const uid = card.uid;
+
+			if(uid) {
+				onCardRead(uid);
+				// axios.post(serverURL + "cardScanned", {
+				// 	uid,
+				// 	admin
+				// }).then((res) => {
+				// 	switch(res.data.status) {
+				// 		case 0: {
+				// 			reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
+				// 				//console.log("led error: ", e);
+				// 			});
+				// 			break;
+				// 		}
+				// 		default: {
+				// 			reader.led(successLEDBits, [0x00, 0x02, 0x01, 0x02]).catch((e) => {
+				// 				//console.log("led error: ", e);
+				// 			});
+				// 			break;
+				// 		}
+				// 	}
+				// }).catch((e) => {
+				// 	console.log("axios error: ", e);
+				// 	reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
+				// 		//console.log("led error: ", e);
+				// 	});
+				// });
+			}
+		});
+
+		reader.on("card.off", card => {
+			console.log("card removed");
+		});
+
+		reader.on("error", err => {
+			console.log("error: ", err);
+
+			reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
+				//console.log("led error: ", e);
+			});
+		});
+
+		reader.on("end", () => {
+			console.log("reader removed");
 		});
 	});
-
-	reader.on("end", () => {
-		console.log("reader removed");
+	
+	nfc.on("error", err => {
+		console.log("error: ", err);
 	});
-});
- 
-nfc.on("error", err => {
-	console.log("error: ", err);
-});
+}
