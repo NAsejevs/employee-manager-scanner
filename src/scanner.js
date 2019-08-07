@@ -89,42 +89,198 @@ const lcd_reader = require('acr1222l');
 
 if(lcd) {
 
-	const lcd_reader_error = (err) => {
+	// const init = () => {
+	// 	dateTimeInterval = setInterval(() => {
+	// 		homeScreen();
+	// 	}, 1000);
+
+	// 	homeScreen().then(() => {
+	// 		read();
+	// 	}).catch(() => {
+	// 		read();
+	// 	});
+	// }
+
+	// const flashScreen = () => {
+	// 	const flashPromise = new Promise((resolve, reject) => {
+	// 		const flashTimes = 3;
+	// 		let flashCount = 0;
+	// 		let flashFlip = false;
+	// 		let time = 150;
+	
+	// 		const flash = () => {
+	// 			const promise = flashFlip
+	// 			? lcd_reader.turnOnBacklight()
+	// 			: lcd_reader.turnOffBacklight();
+	
+	// 			promise.then(() => {
+	// 				setTimeout(() => {
+	// 					flashCount++;
+	// 					flashFlip = !flashFlip;
+	
+	// 					if(flashCount < flashTimes * 2) {
+	// 						flash();
+	// 					} else {
+	// 						lcd_reader.turnOnBacklight().then(() => {
+	// 							resolve();
+	// 						});
+	// 					}
+	// 				}, time);
+	// 			})
+	// 		}
+	
+	// 		flash();
+	// 	});
+	// 	return flashPromise;
+	// }
+
+	// const getTime = () => {
+	// 	const date = new Date();
+	// 	return date.getHours() + ":" + date.getMinutes();
+	// }
+
+	// const getDate = () => {
+	// 	const date = new Date();
+	// 	return date.getDay() + "/" + date.getDate() + "/" + date.getFullYear();
+	// }
+
+	// let dateTimeInterval = null;
+	// const homeScreen = () => {
+	// 	return lcd_reader.writeToLCD(getDate(), getTime()).catch(() => {
+	// 		console.log("Home screen error");
+	// 	});
+	// }
+
+	// const employeeScreen = () => {
+	// 	clearInterval(dateTimeInterval);
+	// 	return lcd_reader.writeToLCD('Ienacis!', '').catch(() => {
+	// 		console.log("Employee screen error");
+	// 	});
+	// }
+
+	// const scan = (data) => {
+	// 	console.log("SCANNED: ", data.toString("hex"));
+	// 	previousScan = data.toString("hex");
+	// 	previousScanTime = new Date().getTime();
+	// }
+
+	// const read = () => {
+	// 	return lcd_reader.readUUID().then((data) => {
+	// 		lcd_reader.stopReadUUID().catch(() => {
+	// 			console.log("Stop UUID read error");
+	// 		});
+	// 		scan(data);
+	// 	}).then(() => {
+	// 		employeeScreen().then(() => {
+	// 			const cardPresentInterval = setInterval(() => {
+	// 				if(!lcd_reader.cardPresent) {
+	// 					clearInterval(cardPresentInterval);
+	// 					init();
+	// 				}
+	// 			});
+	// 		}).catch(() => {
+	// 			console.log("EMPLOYEE SCREEN FAIL");
+	// 			read();
+	// 		})
+	// 	}).catch(() => {
+	// 		console.log("READ UUID FAIL");
+	// 		read();
+	// 	})
+	// }
+
+
+	// lcd_reader.initialize(lcd_reader_error, debug=false).then(() => {
+	// 	init();
+	// });
+
+
+	const lcd_reader_error = async (err) => {
 		console.log('NFC ERROR CODE:', err.error_code);
 		console.log('NFC ERROR MESSAGE:', err.error);
+		await lcd_reader.disconnect();
+		await main();
+	}
+
+	const getTime = () => {
+		const date = new Date();
+		return date.getHours() + ":" + date.getMinutes();
+	}
+
+	const getDate = () => {
+		const date = new Date();
+		return date.getDay() + "/" + date.getDate() + "/" + date.getFullYear();
 	}
 
 	async function main() {
-		await lcd_reader.initialize(lcd_reader_error, debug=true);
-		await lcd_reader.writeToLCD('LABDIEN!', '');
+		const init = async () => {
+			try {
+				await lcd_reader.initialize(lcd_reader_error, debug=false);
+			} catch {
+				console.log("Failed to initialize.");
+				await init();
+			}
+		}
 
+		const mainScreen = async () => {
+			await lcd_reader.writeToLCD(getTime(), getDate());
+		}
+
+		const infiniteAttempt = async (func) => {
+			try {
+				console.log("trying...");
+				await func();
+			} catch {
+				console.log("failed, trying...");
+				await infiniteAttempt(func);
+			}
+		}
+
+		const cardNotPresent = async () => {
+			try {
+				clearInterval(cardPresentInterval);
+				await lcd_reader.stopReadUUID();
+				await mainScreen();
+				await waitForCard();
+			} catch {
+				cardNotPresent();
+			}
+		}
+
+		// Initialize the scanner
+		console.log("Initializing scanner...");
+		await init();
+		await mainScreen();
+
+		let cardPresentInterval = null;
 		let uuid = null;
-		async function waitForCard() {
-			try { 
+		const waitForCard = async () => { 
+			try {
+				await lcd_reader.buzzerOff();
 				uuid = await lcd_reader.readUUID();
-				await onCardRead(uuid).then((data) => {
-					lcd_reader.writeToLCD('Card UUID:', uuid.toString('hex'));
-					// if(data.data.status === 0) {
-					// 	throw new Error();
-					// }
-					console.log("DATA: ", data.data);
-
-					setTimeout(async () => {
-						await lcd_reader.clearLCD();
-						await lcd_reader.writeToLCD('LABDIEN!', '');
-						await lcd_reader.stopReadUUID();
-						await waitForCard();
-					}, 2000);
+				await lcd_reader.buzzerOn();
+				console.log("Card scanned...");
+				await onCardRead(uuid).then(async (data) => {
+					await lcd_reader.writeToLCD(data.data.employee.surname + " " + data.data.employee.name, uuid.toString('hex'));
+				});
+				cardPresentInterval = setInterval(async () => {
+					if(!lcd_reader.cardPresent) {
+						cardNotPresent();
+					}
 				});
 			} catch {
-				await lcd_reader.writeToLCD('ERROR!', '');
+				console.log("ERROR!");
 				setTimeout(async () => {
-					await waitForCard();
+					main();
 				}, 1000);
 			}
 		}
 
-		await waitForCard();
+		try {
+			await waitForCard();
+		}
+		catch {
+			main();
+		}
 	}
 
 	main();
