@@ -114,14 +114,21 @@ if (cluster.isWorker) {
 			await main();
 		}
 
+		const addZero = (i) => {
+			if (i < 10) {
+				i = "0" + i;
+			}
+			return i;
+		}
+
 		const getTime = () => {
 			const date = new Date();
-			return date.getHours() + ":" + date.getMinutes();
+			return addZero(date.getHours()) + ":" + addZero(date.getMinutes());
 		}
 
 		const getDate = () => {
 			const date = new Date();
-			return date.getDay() + "/" + date.getDate() + "/" + date.getFullYear();
+			return addZero(date.getDate()) + "/" + addZero(date.getMonth() + 1) + "/" + addZero(date.getFullYear());
 		}
 
 		async function main() {
@@ -153,6 +160,9 @@ if (cluster.isWorker) {
 					clearInterval(cardPresentInterval);
 					await lcd_reader.stopReadUUID();
 					await mainScreen();
+					mainScreenInterval = setInterval(async () => {
+						await mainScreen();
+					}, 60000);
 					await waitForCard();
 				} catch(e) {
 					cardNotPresent();
@@ -161,17 +171,24 @@ if (cluster.isWorker) {
 
 			// Initialize the scanner
 			console.log("Initializing LCD scanner...");
-			await init();
-			await mainScreen();
 
 			let cardPresentInterval = null;
+			let mainScreenInterval = null;
 			let uuid = null;
+
+			await init();
+			await mainScreen();
+			mainScreenInterval = setInterval(async () => {
+				await mainScreen();
+			}, 60000);
+
 			const waitForCard = async () => { 
 				try {
 					//await lcd_reader.buzzerOff();console.log("1");
 					uuid = await lcd_reader.readUUID();
 					//await lcd_reader.buzzerOn();console.log("3");
 					await onCardRead(uuid.toString("hex")).then(async (data) => {
+						await clearInterval(mainScreenInterval);
 						console.log("received response from server: ", data.data);
 						await lcd_reader.writeToLCD(data.data.employee.name[0] + "." + data.data.employee.surname,
 							data.data.employee.working 
