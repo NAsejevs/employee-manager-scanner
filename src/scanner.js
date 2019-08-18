@@ -9,8 +9,8 @@ const lcd_reader = require('acr1222l');
 const cluster = require('cluster');
 const { serverURL } = require("./config");
 
-const admin = process.env.admin;
-const lcd = process.env.lcd;
+const admin = process.env.ADMIN;
+const lcd = process.env.LCD;
 
 if (cluster.isMaster) {
 	cluster.fork();

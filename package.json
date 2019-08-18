@@ -12,8 +12,9 @@
 		"nodemon": "^1.18.10"
 	},
 	"scripts": {
-		"scanner": "cross-env ADMIN=0 nodemon src/scanner.js",
-		"scanner_admin": "cross-env ADMIN=1 nodemon src/scanner.js",
-		"scanner_lcd": "cross-env LCD=1 ADMIN=1 nodemon src/scanner.js"
+		"scanner": "cross-env LCD=0 ADMIN=0 nodemon src/scanner.js",
+		"scanner_admin": "cross-env LCD=0 ADMIN=1 nodemon src/scanner.js",
+		"scanner_lcd": "cross-env LCD=1 ADMIN=0 nodemon src/scanner.js",
+		"scanner_lcd_admin": "cross-env LCD=1 ADMIN=1 nodemon src/scanner.js"
 	}
 }
