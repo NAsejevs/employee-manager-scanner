@@ -5,7 +5,6 @@ const compression = require("compression");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const axios = require("axios");
-const lcd_reader = require('acr1222l');
 const cluster = require('cluster');
 const { serverURL } = require("./config");
 
@@ -103,6 +102,8 @@ if (cluster.isWorker) {
 
 
 	if(lcd) {
+		const lcd_reader = require('acr1222l');
+
 		const lcd_reader_error = async (err) => {
 			console.log('NFC ERROR CODE:', err.error_code);
 			console.log('NFC ERROR MESSAGE:', err.error);
@@ -156,7 +157,7 @@ if (cluster.isWorker) {
 			}
 
 			// Initialize the scanner
-			console.log("Initializing scanner...");
+			console.log("Initializing LCD scanner...");
 			await init();
 			await mainScreen();
 
@@ -198,6 +199,8 @@ if (cluster.isWorker) {
 
 		const successLEDBits = 0b10000000;
 		const errorLEDBits = 0b01000000;
+
+		console.log("Initializing NON-LCD scanner...");
 
 		nfc.on("reader", async reader => {
 			reader.aid = "F222222222";
