@@ -8,8 +8,8 @@ const axios = require("axios");
 const cluster = require('cluster');
 const { serverURL } = require("./config");
 
-const admin = process.env.ADMIN;
-const lcd = process.env.LCD;
+const admin = parseInt(process.env.ADMIN);
+const lcd = parseInt(process.env.LCD);
 
 console.log("process.env.ADMIN: ", process.env.ADMIN);
 console.log("process.env.LCD: ", process.env.LCD);
