@@ -169,10 +169,11 @@ if (cluster.isWorker) {
 			const waitForCard = async () => { 
 				try {
 					//await lcd_reader.buzzerOff();console.log("1");
-					uuid = await lcd_reader.readUUID();console.log("2");
+					uuid = await lcd_reader.readUUID();console.log("read UUID");
 					//await lcd_reader.buzzerOn();console.log("3");
 					console.log("Card scanned...");console.log("4");
 					await onCardRead(uuid).then(async (data) => {
+						console.log("received response from server: ", data);
 						await lcd_reader.writeToLCD(data.data.employee.surname + " " + data.data.employee.name, uuid.toString('hex'));console.log("5");
 					});
 					cardPresentInterval = setInterval(async () => {
