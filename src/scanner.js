@@ -124,8 +124,8 @@ if (cluster.isWorker) {
 			const init = async () => {
 				try {
 					await lcd_reader.initialize(lcd_reader_error, debug=false);
-				} catch {
-					console.log("Failed to initialize.");
+				} catch(e) {
+					console.log("Failed to initialize: ", e);
 					await init();
 				}
 			}
@@ -138,8 +138,8 @@ if (cluster.isWorker) {
 				try {
 					console.log("trying...");
 					await func();
-				} catch {
-					console.log("failed, trying...");
+				} catch(e) {
+					console.log("failed, trying... ", e);
 					await infiniteAttempt(func);
 				}
 			}
@@ -150,7 +150,7 @@ if (cluster.isWorker) {
 					await lcd_reader.stopReadUUID();
 					await mainScreen();
 					await waitForCard();
-				} catch {
+				} catch(e) {
 					cardNotPresent();
 				}
 			}
@@ -176,7 +176,7 @@ if (cluster.isWorker) {
 							cardNotPresent();
 						}
 					});
-				} catch {
+				} catch(e) {
 					console.log("ERROR!");
 					setTimeout(async () => {
 						main();
@@ -187,7 +187,7 @@ if (cluster.isWorker) {
 			try {
 				await waitForCard();
 			}
-			catch {
+			catch(e) {
 				main();
 			}
 		}
