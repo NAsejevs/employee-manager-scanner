@@ -228,7 +228,7 @@ if (cluster.isWorker) {
 				const uid = card.uid;
 
 				if(uid) {
-					onCardRead(uid).then(() => {
+					onCardRead(uid).then((res) => {
 						switch(res.data.status) {
 							case 0: {
 								reader.led(errorLEDBits, [0x01, 0x01, 0x03, 0x01]).catch((e) => {
