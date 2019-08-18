@@ -173,7 +173,7 @@ if (cluster.isWorker) {
 					//await lcd_reader.buzzerOn();console.log("3");
 					console.log("Card scanned...");console.log("4");
 					await onCardRead(uuid).then(async (data) => {
-						console.log("received response from server: ", data);
+						console.log("received response from server: ", data.data);
 						await lcd_reader.writeToLCD(data.data.employee.surname + " " + data.data.employee.name, uuid.toString('hex'));console.log("5");
 					});
 					cardPresentInterval = setInterval(async () => {
