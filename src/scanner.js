@@ -101,7 +101,7 @@ if (cluster.isWorker) {
 	}
 
 
-	if(lcd) {
+	if(lcd === 1) {
 		const lcd_reader = require('acr1222l');
 
 		const lcd_reader_error = async (err) => {
