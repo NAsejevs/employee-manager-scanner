@@ -11,6 +11,9 @@ const { serverURL } = require("./config");
 const admin = process.env.ADMIN;
 const lcd = process.env.LCD;
 
+console.log("process.env.ADMIN: ", process.env.ADMIN);
+console.log("process.env.LCD: ", process.env.LCD);
+
 if (cluster.isMaster) {
 	cluster.fork();
   
