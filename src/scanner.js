@@ -11,9 +11,6 @@ const { serverURL } = require("./config");
 const admin = parseInt(process.env.ADMIN);
 const lcd = parseInt(process.env.LCD);
 
-console.log("process.env.ADMIN: ", process.env.ADMIN);
-console.log("process.env.LCD: ", process.env.LCD);
-
 if (cluster.isMaster) {
 	cluster.fork();
   
@@ -29,8 +26,6 @@ if (cluster.isMaster) {
 }
 
 if (cluster.isWorker) {
-	console.log("Running as admin: ", admin);
-
 	var whitelist = [
 		"http://localhost:8080",
 		"http://192.168.1.150:8080",
