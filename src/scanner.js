@@ -99,7 +99,7 @@ if (cluster.isWorker) {
 	}
 
 	if(lcd === 1) {
-		const lcd_reader = require('acr1222l');
+		const lcd_reader = require('acr1222l2');
 
 		const lcd_reader_error = async (err) => {
 			console.log('NFC ERROR CODE:', err.error_code);

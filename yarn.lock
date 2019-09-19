@@ -31,10 +31,10 @@ accepts@~1.3.5, accepts@~1.3.7:
     mime-types "~2.1.24"
     negotiator "0.6.2"
 
-acr1222l@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/acr1222l/-/acr1222l-0.4.0.tgz#53d5b379ae491b5ab1a3cc20bc3e804f14d12e97"
-  integrity sha512-B7NoO/5KSf8uhEAxOJuTltKJM87mJPa/RyJURaSKV/z0BQhauVGv8ZfQ7HTGX2RXZRZ9J/gscwHJSf75GT3Ubg==
+acr1222l2@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/acr1222l2/-/acr1222l2-0.1.3.tgz#9386b02be7b308fbc48ad9a88c26cb246f4ad231"
+  integrity sha512-eQA84+bFHHp1q8roub46eSYLATZF2gRCclQI8I/rqbkrxCz67e2Q8qsQbJBjUdQxZcSHdS0vQ3HmUIb/2ygMcA==
   dependencies:
     "@pokusew/pcsclite" "^0.4.17"
     ndef "^0.1.3"
