@@ -98,7 +98,6 @@ if (cluster.isWorker) {
 		}
 	}
 
-
 	if(lcd === 1) {
 		const lcd_reader = require('acr1222l');
 
@@ -130,6 +129,7 @@ if (cluster.isWorker) {
 			const init = async () => {
 				try {
 					await lcd_reader.initialize(lcd_reader_error, debug=false);
+					await lcd_reader.disableBuzzerEvents();
 				} catch(e) {
 					console.log("Failed to initialize: ", e);
 					await init();
@@ -171,6 +171,9 @@ if (cluster.isWorker) {
 			let mainScreenInterval = null;
 			let uuid = null;
 
+			let buzzerCounter = 0;
+			let buzzerInterval = null;
+
 			await init();
 			await mainScreen();
 			mainScreenInterval = setInterval(async () => {
@@ -179,16 +182,33 @@ if (cluster.isWorker) {
 
 			const waitForCard = async () => { 
 				try {
-					//await lcd_reader.buzzerOff();console.log("1");
 					uuid = await lcd_reader.readUUID();
-					//await lcd_reader.buzzerOn();console.log("3");
-					await onCardRead(uuid.toString("hex")).then(async (data) => {
+					await onCardRead(uuid.toString("hex")).then(async (res) => {
 						await clearInterval(mainScreenInterval);
-						console.log("received response from server: ", data.data);
-						await lcd_reader.writeToLCD(data.data.employee.name[0] + "." + data.data.employee.surname,
-							data.data.employee.working 
-							? "IZGAJIS      -->"
-							: "IENACIS      <--");
+						switch(res.data.status) {
+							case 0: {
+								// sound 3 beep due to error
+								buzzerCounter = 0;
+								buzzerInterval = setInterval(async () => {
+									await lcd_reader.turnOnBuzzer();
+
+									buzzerCounter += 1;
+									if(buzzerCounter >= 3) {
+										clearInterval(buzzerInterval);
+									}
+								}, 200);
+								break;
+							}
+							default: {
+								// sound 1 beep to indicate success
+								await lcd_reader.writeToLCD(res.data.employee.name[0] + "." + res.data.employee.surname,
+									res.data.employee.working 
+									? "IZGAJIS      -->"
+									: "IENACIS      <--");
+								await lcd_reader.turnOnBuzzer();
+								break;
+							}
+						}
 					});
 					cardPresentInterval = setInterval(async () => {
 						if(!lcd_reader.cardPresent) {
